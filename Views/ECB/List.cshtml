@@ -1,0 +1,74 @@
+﻿@model CurrencyModel
+@using System.Text.Encodings.Web;
+@{
+    ViewData["Title"] = "ECB Page";
+}
+
+<div class="text-center mb-2" >
+    <h1 class="display-4">ECB Rates</h1>
+    <a asp-controller="ECB" asp-action="List" asp-route-liveRates="true" class="btn btn-success">
+        <i class="fas fa-tasks"></i>
+        Get Rates
+    </a>
+</div>
+
+<div class="card card-default">
+    <div class="card-header mb-1">
+        Currency Rates
+    </div>
+    <table id="rates" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+        <thead>
+            <tr>
+                <th>CurrencyCode</th>
+                <th>Rate</th>
+                <th>UpdatedOn</th>
+            </tr>
+        </thead>
+    </table>
+    <div class="card-body">
+
+    </div>
+</div>
+<script>
+    var currencyrates_source = [
+        @for (var i = 0; i < Model.ExchangeRates.Count; i++)
+        {
+            var rate = Model.ExchangeRates[i];
+            <text>
+                {
+                    CurrencyCode:
+                        "@(Html.Raw(JavaScriptEncoder.Default.Encode(rate.CurrencyCode)))",
+                    Rate:
+                        "@(Html.Raw(JavaScriptEncoder.Default.Encode(rate.Rate.ToString())))",
+                    UpdatedOn:
+                        "@(Html.Raw(JavaScriptEncoder.Default.Encode(rate.UpdatedOn.ToString())))"
+                }
+            </text>
+            if (i != Model.ExchangeRates.Count - 1)
+            {
+                <text>,</text>
+            }
+        }
+    ];
+
+    $(document).ready(function () {
+        $("#rates").DataTable({
+            "processing": true,
+            "serverSide": false,    
+            "data": currencyrates_source
+        ,
+            "columnDefs": [{
+                "targets": [0],
+                "visible": true,
+                "searchable": true
+            }]
+            ,
+            "columns":
+            [
+                { "data": "CurrencyCode", "name": "CurrencyCode", "autoWidth": true },
+                { "data": "Rate", "name": "Rate", "autoWidth": true },
+                { "data": "UpdatedOn", "name": "UpdatedOn", "autoWidth": true },
+            ]
+        });
+    });
+</script>

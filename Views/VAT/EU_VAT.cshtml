@@ -1,0 +1,86 @@
+﻿@model VatModel
+@{
+    ViewData["Title"] = "VAT Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">VAT Check</h1>
+</div>
+<form asp-controller="VAT" asp-action="EU_VAT" method="post" id="formVAT">
+    <div class="form-group row">
+        <div class="col-md-3">
+            VAT Number (LV 40003074764)
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            @Html.EditorFor(m => m.VatNumber, new { @id = "vatrd" })
+        </div>
+    </div>
+    <button type="submit" name="check" class="btn btn-primary">
+        <i class="far fa-save"></i>
+        Check VAT
+    </button>
+</form>
+
+@if (Model != null)
+{
+    <div class="form">
+        @if (string.IsNullOrEmpty(Model.Error))
+        {
+            
+                <div class="row form-control-sm heightAuto">
+                    <div class="col-sm-3">
+                        VAT number
+                    </div>
+                    <div class="col-sm-4">
+                        @Model.VatResult.vatNumber
+                    </div>
+                </div>
+
+                <div class="row form-control-sm heightAuto">
+                    <div class="col-sm-3">
+                        Status
+                    </div>
+                    <div class="col-sm-4">
+                        @Model.Status
+                    </div>
+                </div>
+                <div class="row form-control-sm heightAuto">
+                    <div class="col-sm-3">
+                        Country
+                    </div>
+                    <div class="col-sm-4">
+                        @Model.VatResult.countryCode
+                    </div>
+                </div>
+                <div class="row form-control-sm heightAuto">
+                    <div class="col-sm-3">
+                        Name
+                    </div>
+                    <div class="col-sm-4">
+                        @Model.VatResult.name
+                    </div>
+                </div>
+
+                <div class="row form-control-sm heightAuto">
+                    <div class="col-sm-2">
+                        Address
+                    </div>
+                    <div class="col-sm-4">
+                        @Model.VatResult.address
+                    </div>
+                </div>
+        }
+        else
+        {
+            <div class="row form-control-sm heightAuto">
+                <div class="col-sm-12 alert-danger">
+                    @Model.Error
+                </div>
+            </div>
+        }
+
+    </div>
+
+}
